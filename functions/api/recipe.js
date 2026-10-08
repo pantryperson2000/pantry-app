@@ -38,9 +38,11 @@ export async function onRequestPost(context) {
       (ings.length ? " using: " + ings.join(", ") : "") + ". " +
       'Reply ONLY with JSON like {"time":"20 min","steps":["Step one.","Step two."]}. Use at most 8 steps.';
   } else if (Array.isArray(b.foods)) {
-    const foods = b.foods.slice(0, 2).map(clean);
-    if (foods.length !== 2 || !foods[0] || !foods[1]) return json({ error: "Enter two foods" }, 400);
-    prompt = "Give 4 different home-cooking recipes that use BOTH " + foods[0] + " and " + foods[1] + ". Make them " + levels[level] + ". ";
+    const foods = b.foods.slice(0, 20).map(clean).filter(Boolean);
+    if (!foods.length) return json({ error: "Pick at least one food" }, 400);
+    prompt = "Give 4 different home-cooking recipes that use these foods: " + foods.join(", ") + ". " +
+      "Each recipe should use as many of these foods as makes sense, and recipes that use all of them are best. " +
+      "Other ingredients should be common kitchen staples. ";
   } else if (Array.isArray(b.pantry) && b.pantry.length) {
     const items = b.pantry.slice(0, 40).map(function (i) {
       return clean(i.name) + " (" + (Number(i.days) || 0) + " days left)";
