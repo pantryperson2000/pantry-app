@@ -15,10 +15,14 @@ export async function onRequestPost(context) {
   }
 
   const prompt =
-    "List the food items you can see in this photo of a fridge or pantry. " +
-    "For each item give a short simple lowercase name (singular, like 'egg', 'milk', 'tomato') " +
-    "and a rough guess of how many days it will stay good from today. " +
-    'Reply ONLY with a JSON array like [{"name":"milk","days":5}]. Skip anything that is not food.';
+    "List the food items you can see in this photo of a fridge, pantry, groceries, or a single product. " +
+    "For each item give: name (short simple lowercase generic name, singular, like 'egg' or 'milk'); " +
+    "brand (the brand or company name ONLY if it is clearly readable on the packaging, otherwise an empty string); " +
+    "days (a rough guess of how many days it will stay good from today); " +
+    "qty (how many you can see, or the package amount like 500) and unit (one of count, pack, g, kg, ml, l, oz, lb); " +
+    "serving (a short typical serving, like '1 large egg' or '1 cup (240 ml)'); " +
+    "and the estimated nutrition of that one serving: calories (kcal), protein, carbs, fat, fiber, sugar (grams), sodium (milligrams). " +
+    'Reply ONLY with a JSON array like [{"name":"milk","brand":"Horizon","days":5,"qty":1,"unit":"l","serving":"1 cup (240 ml)","calories":150,"protein":8,"carbs":12,"fat":8,"fiber":0,"sugar":12,"sodium":120}]. Skip anything that is not food.';
 
   const requestBody = JSON.stringify({
     contents: [
